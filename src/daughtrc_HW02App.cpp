@@ -32,6 +32,9 @@ class daughtrc_HW02App : public AppBasic {
 	uint8_t* myPixels_;
 	rectangle* rectangle_;
 
+	//create linked list
+	node* sentinel;
+
 };
 
 //set window size
@@ -43,7 +46,7 @@ void daughtrc_HW02App::prepareSettings(Settings* settings)
 
 void daughtrc_HW02App::drawRectangle(uint8_t* pixels, rectangle* rectangle)
 {
-	for (int y = rectangle->y1; y < (rectangle->y1 + rectangle->height); y++) {
+	for (int y = rectangle->x1; y < (rectangle->y1 + rectangle->height); y++) {
 		for (int x = rectangle->x1; x < (rectangle->x1 + rectangle->width); x++) {
 				int index = 4*(x+y*kSurfaceSize);
 				pixels[index] = rectangle->color.r;
@@ -61,9 +64,13 @@ void daughtrc_HW02App::setup()
 	clear(myPixels_);
 
 	rectangle_ = new rectangle();
-	rectangle_->set(100,100,100,100,Color8u(0,0,0));
-	drawRectangle(myPixels_, rectangle_);
+	rectangle_->set(100,100,100,100,Color8u(0,0,0),myPixels_);
 
+	sentinel = new node;
+	sentinel->next_ = sentinel;
+	sentinel->data = rectangle_;
+	rectangle_->draw();
+	
 }
 
 void daughtrc_HW02App::clear(uint8_t* pixels){

@@ -3,6 +3,6 @@
 
 class node {
   public:
-	  Shape data;
+	  Shape* data;
 	  node* next_;
 };

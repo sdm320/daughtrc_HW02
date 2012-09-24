@@ -12,7 +12,9 @@ using namespace std;
 class rectangle : public Shape {
   public:
 	  rectangle();
-	  int x1, y1, width, height;
+	  int x1, y1, width, height, kSurfaceSize;
 	  Color8u color;
-	  void set(int set_x, int set_y, int set_width, int set_height, Color8u set_color);
+	  uint8_t* pixels;
+	  void set(int set_x, int set_y, int set_width, int set_height, Color8u set_color, uint8_t* set_pixels);
+	  void draw();
 };
