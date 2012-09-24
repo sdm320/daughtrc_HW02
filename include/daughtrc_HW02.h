@@ -5,4 +5,4 @@ class node {
   public:
 	  Shape data;
 	  node* next_;
-}
+};

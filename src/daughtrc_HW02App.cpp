@@ -19,7 +19,7 @@ class daughtrc_HW02App : public AppBasic {
 	void update();
 	void draw();
 	void prepareSettings(Settings* settings);
-	void drawRectangle(rectangle* rectangle);
+	void drawRectangle(uint8_t* pixels, rectangle* rectangle);
 	static void clear(uint8_t* pixels);
 
   private:
@@ -28,7 +28,6 @@ class daughtrc_HW02App : public AppBasic {
 	static const int kSurfaceSize=1024;
 
 	//variables
-	node* sentinel_;
 	Surface* mySurface_;
 	uint8_t* myPixels_;
 	rectangle* rectangle_;
@@ -42,9 +41,19 @@ void daughtrc_HW02App::prepareSettings(Settings* settings)
 	settings->setResizable(false);
 }
 
-void daughtrc_HW02App::drawRectangle(rectangle* rectangle)
+void daughtrc_HW02App::drawRectangle(uint8_t* pixels, rectangle* rectangle)
 {
-
+	for (int y = 0; y < kAppWidth; y++) {
+		for (int x = 0; x < kAppHeight; x++) {
+			if (x >= rectangle->x1 && x <= (rectangle->x1 + rectangle->width) &&
+				y >= rectangle->y1 && y <= (rectangle->y1 + rectangle->height)) {
+					int index = 3*(x+y*kAppWidth);
+					pixels[index] = rectangle->color.r;
+					pixels[index+1] = rectangle->color.g;
+					pixels[index+2] = rectangle->color.b;
+			}
+		}
+	}
 }
 
 void daughtrc_HW02App::setup()
@@ -54,10 +63,14 @@ void daughtrc_HW02App::setup()
 	myPixels_ = (*mySurface_).getData();
 	clear(myPixels_);
 
+	rectangle_ = new rectangle();
+	rectangle_->set(100,100,100,100,Color8u(0,0,0));
+	drawRectangle(myPixels_, rectangle_);
+
 }
 
 void daughtrc_HW02App::clear(uint8_t* pixels){
-	Color c = Color(250.0f,250.0f,250.0f);
+	Color c = Color(250.0,250.0,250.0);
 	for(int y = 0; y < kSurfaceSize; y++){
 		for(int x = 0; x < kSurfaceSize; x++){
 			int index = 3*(x + y*kAppWidth);

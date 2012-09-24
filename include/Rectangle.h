@@ -12,8 +12,7 @@ using namespace std;
 class rectangle : public Shape {
   public:
 	  rectangle();
-	  void set(int set_x, int set_y, int set_width, int set_height, Color8u set_color);
-  private:
 	  int x1, y1, width, height;
 	  Color8u color;
+	  void set(int set_x, int set_y, int set_width, int set_height, Color8u set_color);
 };
