@@ -34,6 +34,10 @@ class daughtrc_HW02App : public AppBasic {
 	rectangle* rectangle2;
 	rectangle* rectangle3;
 	rectangle* rectangle4;
+	rectangle* rectangle5;
+	rectangle* rectangle6;
+	rectangle* rectangle7;
+	rectangle* rectangle8;
 
 	//create linked list
 	node* sentinel;
@@ -59,6 +63,17 @@ void insertAfter(node* insertHere, rectangle* new_rectangle)
 	insertHere->next_ = new_node;
 }
 
+void reverse(node* sentinel)
+{
+	node* cur = sentinel;
+	do{
+		node* temp = cur->next_; // Swap next and prev
+		cur->next_ = cur->previous_;
+		cur->previous_ = temp;
+		cur = cur->previous_; // prev is the new next
+	}while(cur != sentinel);
+}
+
 void daughtrc_HW02App::setup()
 {
 	//initialize mySurface_
@@ -69,24 +84,38 @@ void daughtrc_HW02App::setup()
 	//set up first node
 	sentinel = new node;
 	rectangle_ = new rectangle();
-	rectangle_->set(0,0,128,128,Color8u(0,0,0),myPixels_);
+	rectangle_->set(0,0,128,128,Color8u(200,20,125),myPixels_);
 	sentinel->data = rectangle_;
 	sentinel->next_ = sentinel;
 	sentinel->previous_ = sentinel;
 
 	//add a rectangle
 	rectangle2 = new rectangle();
-	rectangle2->set(256,0,128,128,Color8u(0,0,0),myPixels_);
+	rectangle2->set(256,0,128,128,Color8u(25,75,100),myPixels_);
 	insertAfter(sentinel, rectangle2);
 	rectangle3 = new rectangle();
-	rectangle3->set(128,128,128,128,Color8u(0,0,0),myPixels_);
+	rectangle3->set(128,128,128,128,Color8u(100,20,250),myPixels_);
 	insertAfter(sentinel, rectangle3);
 	rectangle4 = new rectangle();
-	rectangle4->set(512,0,128,128,Color8u(0,0,0),myPixels_);
+	rectangle4->set(384,128,128,128,Color8u(175,45,10),myPixels_);
 	insertAfter(sentinel, rectangle4);
+	rectangle5 = new rectangle();
+	rectangle5->set(512,0,128,128,Color8u(126,0,0),myPixels_);
+	insertAfter(sentinel, rectangle5);
+	rectangle6 = new rectangle();
+	rectangle6->set(640,128,128,128,Color8u(0,200,0),myPixels_);
+	insertAfter(sentinel, rectangle6);
+	rectangle7 = new rectangle();
+	rectangle7->set(768,0,128,128,Color8u(0,0,110),myPixels_);
+	insertAfter(sentinel, rectangle7);
+	rectangle8 = new rectangle();
+	rectangle8->set(896,128,128,128,Color8u(150,25,250),myPixels_);
+	insertAfter(sentinel, rectangle8);
+
+	reverse(sentinel);
 
 	count = 0;
-	while (count != 5) {
+	while (count != 9) {
 		sentinel->data->draw();
 		sentinel = sentinel->next_;
 		count++;
@@ -109,6 +138,15 @@ void daughtrc_HW02App::clear(uint8_t* pixels){
 
 void daughtrc_HW02App::mouseDown( MouseEvent event )
 {
+	if (event.isLeftDown()) {
+		reverse(sentinel);
+		count = 0;
+	    while (count != 9) {
+			sentinel->data->draw();
+			sentinel = sentinel->next_;
+			count++;
+		}
+	}		
 }
 
 void daughtrc_HW02App::update()
