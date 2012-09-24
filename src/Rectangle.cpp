@@ -20,7 +20,7 @@ void rectangle::set(int set_x1, int set_y1, int set_width, int set_height, Color
 }
 
 void rectangle::draw() {
-	for (int y = x1; y < (y1 + height); y++) {
+	for (int y = y1; y < (y1 + height); y++) {
 		for (int x = x1; x < (x1 + width); x++) {
 				int index = 4*(x+y*kSurfaceSize);
 				pixels[index] = color.r;

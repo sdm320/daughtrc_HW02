@@ -73,19 +73,18 @@ void daughtrc_HW02App::setup()
 	sentinel->data = rectangle_;
 	sentinel->next_ = sentinel;
 	sentinel->previous_ = sentinel;
-	sentinel->data->draw();
 
 	//add a rectangle
 	rectangle2 = new rectangle();
-	rectangle2->set(128,128,128,128,Color8u(0,0,0),myPixels_);
+	rectangle2->set(256,0,128,128,Color8u(0,0,0),myPixels_);
 	insertAfter(sentinel, rectangle2);
 	rectangle3 = new rectangle();
-	rectangle3->set(256,256,128,128,Color8u(0,0,0),myPixels_);
+	rectangle3->set(128,128,128,128,Color8u(0,0,0),myPixels_);
 	insertAfter(sentinel, rectangle3);
 	rectangle4 = new rectangle();
-	rectangle4->set(256,0,128,128,Color8u(0,0,0),myPixels_);
+	rectangle4->set(512,0,128,128,Color8u(0,0,0),myPixels_);
 	insertAfter(sentinel, rectangle4);
-;
+
 	count = 0;
 	while (count != 5) {
 		sentinel->data->draw();
