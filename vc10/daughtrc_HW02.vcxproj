@@ -105,11 +105,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\daughtrc_HW02App.cpp" />
-    <ClCompile Include="..\src\Node.cpp" />
+    <ClCompile Include="..\src\Rectangle.cpp" />
+    <ClCompile Include="..\src\Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Node.h" />
+    <ClInclude Include="..\include\daughtrc_HW02.h" />
+    <ClInclude Include="..\include\Rectangle.h" />
     <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\include\Shape.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources.rc" />
