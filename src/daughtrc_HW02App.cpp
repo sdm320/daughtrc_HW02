@@ -23,8 +23,8 @@ class daughtrc_HW02App : public AppBasic {
 	static void clear(uint8_t* pixels);
 
   private:
-	static const int kAppWidth=800;
-	static const int kAppHeight=600;
+	static const int kAppWidth=1024;
+	static const int kAppHeight=700;
 	static const int kSurfaceSize=1024;
 
 	//variables
@@ -43,15 +43,12 @@ void daughtrc_HW02App::prepareSettings(Settings* settings)
 
 void daughtrc_HW02App::drawRectangle(uint8_t* pixels, rectangle* rectangle)
 {
-	for (int y = 0; y < kAppWidth; y++) {
-		for (int x = 0; x < kAppHeight; x++) {
-			if (x >= rectangle->x1 && x <= (rectangle->x1 + rectangle->width) &&
-				y >= rectangle->y1 && y <= (rectangle->y1 + rectangle->height)) {
-					int index = 3*(x+y*kAppWidth);
-					pixels[index] = rectangle->color.r;
-					pixels[index+1] = rectangle->color.g;
-					pixels[index+2] = rectangle->color.b;
-			}
+	for (int y = rectangle->y1; y < (rectangle->y1 + rectangle->height); y++) {
+		for (int x = rectangle->x1; x < (rectangle->x1 + rectangle->width); x++) {
+				int index = 4*(x+y*kSurfaceSize);
+				pixels[index] = rectangle->color.r;
+				pixels[index+1] = rectangle->color.g;
+				pixels[index+2] = rectangle->color.b;
 		}
 	}
 }
