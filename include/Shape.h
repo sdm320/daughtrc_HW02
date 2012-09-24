@@ -11,4 +11,5 @@ using namespace std;
 class Shape{
 	public:
 		void set();
+		virtual void draw() = 0;
 };

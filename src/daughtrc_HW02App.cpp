@@ -31,10 +31,15 @@ class daughtrc_HW02App : public AppBasic {
 	Surface* mySurface_;
 	uint8_t* myPixels_;
 	rectangle* rectangle_;
+	rectangle* rectangle2;
+	rectangle* rectangle3;
+	rectangle* rectangle4;
 
 	//create linked list
 	node* sentinel;
+	node* currentNode;
 
+	int count;
 };
 
 //set window size
@@ -44,16 +49,14 @@ void daughtrc_HW02App::prepareSettings(Settings* settings)
 	settings->setResizable(false);
 }
 
-void daughtrc_HW02App::drawRectangle(uint8_t* pixels, rectangle* rectangle)
+void insertAfter(node* insertHere, rectangle* new_rectangle)
 {
-	for (int y = rectangle->x1; y < (rectangle->y1 + rectangle->height); y++) {
-		for (int x = rectangle->x1; x < (rectangle->x1 + rectangle->width); x++) {
-				int index = 4*(x+y*kSurfaceSize);
-				pixels[index] = rectangle->color.r;
-				pixels[index+1] = rectangle->color.g;
-				pixels[index+2] = rectangle->color.b;
-		}
-	}
+	node* new_node = new node;
+	new_node->data = new_rectangle;
+	new_node->next_ = insertHere->next_;
+	new_node->previous_ = insertHere;
+	insertHere->next_->previous_ = new_node;
+	insertHere->next_ = new_node;
 }
 
 void daughtrc_HW02App::setup()
@@ -63,21 +66,41 @@ void daughtrc_HW02App::setup()
 	myPixels_ = (*mySurface_).getData();
 	clear(myPixels_);
 
-	rectangle_ = new rectangle();
-	rectangle_->set(100,100,100,100,Color8u(0,0,0),myPixels_);
-
+	//set up first node
 	sentinel = new node;
-	sentinel->next_ = sentinel;
+	rectangle_ = new rectangle();
+	rectangle_->set(0,0,128,128,Color8u(0,0,0),myPixels_);
 	sentinel->data = rectangle_;
-	rectangle_->draw();
-	
+	sentinel->next_ = sentinel;
+	sentinel->previous_ = sentinel;
+	sentinel->data->draw();
+
+	//add a rectangle
+	rectangle2 = new rectangle();
+	rectangle2->set(128,128,128,128,Color8u(0,0,0),myPixels_);
+	insertAfter(sentinel, rectangle2);
+	rectangle3 = new rectangle();
+	rectangle3->set(256,256,128,128,Color8u(0,0,0),myPixels_);
+	insertAfter(sentinel, rectangle3);
+	rectangle4 = new rectangle();
+	rectangle4->set(256,0,128,128,Color8u(0,0,0),myPixels_);
+	insertAfter(sentinel, rectangle4);
+;
+	count = 0;
+	while (count != 5) {
+		sentinel->data->draw();
+		sentinel = sentinel->next_;
+		count++;
+	}
+
+
 }
 
 void daughtrc_HW02App::clear(uint8_t* pixels){
 	Color c = Color(250.0,250.0,250.0);
 	for(int y = 0; y < kSurfaceSize; y++){
 		for(int x = 0; x < kSurfaceSize; x++){
-			int index = 3*(x + y*kAppWidth);
+			int index = 4*(x + y*kAppWidth);
 			pixels[index] = c.r;
 			pixels[index+1] = c.g;
 			pixels[index+2] = c.b;
