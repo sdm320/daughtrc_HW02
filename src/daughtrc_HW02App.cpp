@@ -5,6 +5,8 @@
 #include "Shape.h"
 #include "daughtrc_HW02.h"
 #include "Rectangle.h"
+#include "cinder/text.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -16,6 +18,7 @@ class daughtrc_HW02App : public AppBasic {
 	//methods
 	void setup();
 	void mouseDown( MouseEvent event );	
+	void keyDown ( KeyEvent event);
 	void update();
 	void draw();
 	void prepareSettings(Settings* settings);
@@ -27,23 +30,28 @@ class daughtrc_HW02App : public AppBasic {
 	static const int kAppHeight=700;
 	static const int kSurfaceSize=1024;
 
+	void createTextBox();
+	bool displayTextBox;
 	//variables
 	Surface* mySurface_;
 	uint8_t* myPixels_;
-	rectangle* rectangle_;
-	rectangle* rectangle2;
-	rectangle* rectangle3;
-	rectangle* rectangle4;
-	rectangle* rectangle5;
-	rectangle* rectangle6;
-	rectangle* rectangle7;
-	rectangle* rectangle8;
+	rectangle *rectangle_;
+	rectangle *rectangle2;
+	rectangle *rectangle3;
+	rectangle *rectangle4;
+	rectangle *rectangle5;
+	rectangle *rectangle6;
+	rectangle *rectangle7;
+	rectangle *rectangle8;
 
 	//create linked list
-	node* sentinel;
-	node* currentNode;
+	node *sentinel;
+	node *currentNode;
 
 	int count;
+
+	gl::Texture *textTexture;
+	TextBox *textBox;
 };
 
 //set window size
@@ -52,8 +60,15 @@ void daughtrc_HW02App::prepareSettings(Settings* settings)
 	settings->setWindowSize(kAppWidth,kAppHeight);
 	settings->setResizable(false);
 }
-
-void insertAfter(node* insertHere, rectangle* new_rectangle)
+void daughtrc_HW02App::createTextBox(){
+	textBox = new TextBox();
+	textBox -> alignment( TextBox::CENTER );
+	textBox -> setText("there are squares \n press ? to hide");
+	textBox -> setFont(Font("Times", 40));
+	textBox->setBackgroundColor(ColorA(0,0,0,0.5));
+	textTexture = new gl::Texture(textBox -> render());
+}
+void insertAfter(node *insertHere, rectangle *new_rectangle)
 {
 	node* new_node = new node;
 	new_node->data = new_rectangle;
@@ -81,6 +96,10 @@ void daughtrc_HW02App::setup()
 	myPixels_ = (*mySurface_).getData();
 	clear(myPixels_);
 
+	//create the text box
+	createTextBox();
+	displayTextBox = true;
+	
 	//set up first node
 	sentinel = new node;
 	rectangle_ = new rectangle();
@@ -123,7 +142,15 @@ void daughtrc_HW02App::setup()
 
 
 }
-
+void daughtrc_HW02App::keyDown( KeyEvent event){
+	
+	if(event.getChar() == 'r'){
+		reverse(sentinel);
+	}
+	if(event.getChar() == '?'){
+		displayTextBox = !displayTextBox;
+	}
+}
 void daughtrc_HW02App::clear(uint8_t* pixels){
 	Color c = Color(250.0,250.0,250.0);
 	for(int y = 0; y < kSurfaceSize; y++){
@@ -151,6 +178,13 @@ void daughtrc_HW02App::mouseDown( MouseEvent event )
 
 void daughtrc_HW02App::update()
 {
+	reverse(sentinel);
+		count = 0;
+	    while (count != 9) {
+			sentinel->data->draw();
+			sentinel = sentinel->next_;
+			count++;
+		}
 }
 
 void daughtrc_HW02App::draw()
@@ -158,6 +192,17 @@ void daughtrc_HW02App::draw()
 	// clear out the window with white
 	//gl::clear( Color( 250.0, 250.0, 250.0 ) ); 
 	gl::draw(*mySurface_);
+	//attempted to get the list to update on the screen (not working)
+	node* currentNode = sentinel -> next_;
+	do{
+		currentNode ->data->draw();
+		currentNode  = currentNode -> next_;
+	} while(currentNode != sentinel);
+
+	//draw the text box
+	if(displayTextBox){
+		gl::draw(*textTexture);
+	}
 }
 
 CINDER_APP_BASIC( daughtrc_HW02App, RendererGl )
